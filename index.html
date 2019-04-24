@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>websocket</title>
+	</head>
+	<body>
+		<h1>简单聊天室</h1>
+		<input id="sendTxt" type="text" />
+		<button id="sendBtn">发送</button>
+		<div id="recv"></div>
+		<script type="text/javascript">
+			var websocket = new WebSocket("ws://127.0.0.1:3000/wsServer.js");
+			
+			function showMassage(str){
+				var div = document.createElement('div');
+				div.innerHTML = str;
+				document.body.appendChild(div);
+			}
+			websocket.onopen = function () {
+				console.log('websocket open');
+				document.getElementById("sendBtn").onclick = function () {
+					var txt = document.getElementById("sendTxt").value;
+					if(txt){
+						websocket.send(txt);
+					}
+				}
+			}
+			websocket.onclose = function () {
+				console.log('websocket close');
+			}
+			websocket.onmessage = function (e) {
+				console.log(e.data);
+				showMassage(e.data);
+			}
+			
+		</script>
+	</body>
+</html>
